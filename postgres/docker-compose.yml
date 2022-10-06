@@ -1,0 +1,14 @@
+version: '3.3'
+
+services:
+  db:
+    image: postgres:14.5-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 'b1rd@tr33'
+      POSTGRES_USER: 'kkoltun'
+      POSTGRES_DB: 'invoice'
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./schema-init:/docker-entrypoint-initdb.d

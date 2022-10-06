@@ -1,0 +1,57 @@
+### Add new invoice actor 1
+
+POST http://localhost:8080/simple/actor
+Content-Type: application/json
+
+{
+  "name": "Company A",
+  "addressLine1": "XYZ Street",
+  "addressLine2": "12-345 XYZ",
+  "addressLine3": "Poland",
+  "registrationNumber": "123"
+}
+
+### Add new invoice actor 2
+
+POST http://localhost:8080/simple/actor
+Content-Type: application/json
+
+{
+  "name": "Company B",
+  "addressLine1": "ABC Street",
+  "addressLine2": "56-789 ABC",
+  "addressLine3": "Poland",
+  "registrationNumber": "567"
+}
+
+### Add a new invoice for hourly service
+
+POST http://localhost:8080/simple/hourly
+Content-Type: application/json
+
+{
+  "fromDate": "31/01/2020",
+  "toDate": "06/02/2020",
+  "invoiceNumber": "01",
+  "unitAmount": 42,
+  "unitNetPrice": 10,
+  "invoiceAmount": 420,
+  "debtorRegistrationNumber": "123",
+  "vendorRegistrationNumber": "567"
+}
+
+### Generate a PDF version of the invoice
+
+GET http://localhost:8080/pdf/01
+
+### Delete added invoice
+
+DELETE http://localhost:8080/simple/invoice/01
+
+### Delete added invoice actor 1
+
+DELETE http://localhost:8080/simple/actor/123
+
+### Delete added invoice actor 2
+
+DELETE http://localhost:8080/simple/actor/567
