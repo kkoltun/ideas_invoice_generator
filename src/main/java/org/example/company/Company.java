@@ -1,4 +1,4 @@
-package org.example.invoice;
+package org.example.company;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -6,8 +6,9 @@ import java.sql.Timestamp;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
-@Table(name = "actor")
-public class InvoiceActor {
+@Table(name = "company")
+@SequenceGenerator(name = "company_id_generator", sequenceName = "company_id_seq", allocationSize = 1)
+public class Company {
     private Integer id;
     private String name;
     private String addressLine1;
@@ -17,11 +18,11 @@ public class InvoiceActor {
     private Timestamp created;
     private Timestamp lastupdated;
 
-    public InvoiceActor() {
+    public Company() {
     }
 
     @Id
-    @GeneratedValue(strategy = SEQUENCE)
+    @GeneratedValue(generator = "company_id_generator", strategy = SEQUENCE)
     public Integer getId() {
         return id;
     }

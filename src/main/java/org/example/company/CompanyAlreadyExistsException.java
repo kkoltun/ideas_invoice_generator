@@ -1,11 +1,9 @@
-package org.example.invoice;
+package org.example.company;
 
-import net.sf.jasperreports.engine.util.JRStyledText;
-
-public class InvoiceActorAlreadyExistsException extends RuntimeException {
+public class CompanyAlreadyExistsException extends RuntimeException {
     private final String invoiceActorRegistrationNumber;
 
-    public InvoiceActorAlreadyExistsException(String invoiceActorRegistrationNumber) {
+    public CompanyAlreadyExistsException(String invoiceActorRegistrationNumber) {
         this.invoiceActorRegistrationNumber = invoiceActorRegistrationNumber;
     }
 

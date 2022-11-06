@@ -1,47 +1,91 @@
 package org.example.pdf;
 
+import io.vavr.control.Option;
+import io.vavr.control.Try;
 import net.sf.jasperreports.engine.*;
+import org.example.international.invoice.InternationalInvoice;
 import org.example.invoice.Invoice;
-import org.example.invoice.InvoiceService;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.example.infrastructure.Database.doInConnection;
 
 @Service
 public class InvoicePdfService {
 
-    private final InvoiceService invoiceService;
+    private enum Template {
+        INVOICE("/jasper/invoice.jrxml"),
+        INTERNATIONAL_INVOICE("/jasper/international_invoice.jrxml");
 
-    public InvoicePdfService(InvoiceService invoiceService) {
-        this.invoiceService = invoiceService;
-    }
+        private final String pathToTemplate;
 
-    public byte[] generate(String invoiceNumber) {
-        Invoice invoice = invoiceService.getInvoice(invoiceNumber);
-
-        if (invoice == null) {
-            throw new InvoicePdfGenerationException(String.format("Invoice with number [%s] does not exist.", invoiceNumber));
+        Template(String pathToTemplate) {
+            this.pathToTemplate = pathToTemplate;
         }
 
+        String getPath() {
+            return pathToTemplate;
+        }
+    }
+
+    public byte[] generate(Invoice invoice) {
+        return generate(invoice.getId(), Template.INVOICE);
+    }
+
+    public byte[] generate(InternationalInvoice invoice) {
+        return generate(invoice.getId(), Template.INTERNATIONAL_INVOICE);
+    }
+
+    private byte[] generate(Integer id, Template template) {
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("invoice_id", invoice.getId());
+        parameters.put("invoice_id", id);
 
+        return Try.of(() -> loadReportTemplate(template))
+                .mapTry(InvoicePdfService::compile)
+                .mapTry(report -> fill(report, parameters))
+                .mapTry(InvoicePdfService::generatePdf)
+                .get();
+    }
+
+    private static InputStream loadReportTemplate(Template template) {
+        return Option.of(InvoicePdfService.class.getResourceAsStream(template.getPath()))
+                .getOrElseThrow(InvoicePdfGenerationException::templateNotFoundException);
+    }
+
+    private static JasperReport compile(InputStream inputStream) {
         try {
-            JasperReport jasperReport = JasperCompileManager.compileReport(this.getClass().getResourceAsStream("/jasper/invoice.jrxml"));
+            return JasperCompileManager.compileReport(inputStream);
+        } catch (JRException exception) {
+            throw InvoicePdfGenerationException.templateCompilationFailed(exception);
+        }
+    }
 
-            // todo infrastructure should be extracted out
-            Class.forName("org.postgresql.Driver");
+    private static JasperPrint fill(JasperReport report, Map<String, Object> parameters) {
+        try {
+            return doInConnection(connection -> {
+                try {
+                    return JasperFillManager.fillReport(report, parameters, connection);
+                } catch (JRException e) {
+                    throw InvoicePdfGenerationException.templateFillingFailed(e);
+                }
+            });
+        } catch (SQLException exception) {
+            throw InvoicePdfGenerationException.templateFillingFailed(exception);
+        }
+    }
 
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/invoice", "kkoltun", "b1rd@tr33");
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
-            connection.close();
-
+    private static byte[] generatePdf(JasperPrint jasperPrint) {
+        try {
             return JasperExportManager.exportReportToPdf(jasperPrint);
-        } catch (Exception e) {
-            throw new InvoicePdfGenerationException(e);
+        } catch (JRException exception) {
+            throw InvoicePdfGenerationException.pdfGenerationFailed(exception);
         }
     }
 }

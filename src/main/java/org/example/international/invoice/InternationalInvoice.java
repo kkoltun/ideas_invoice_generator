@@ -1,4 +1,4 @@
-package org.example.invoice;
+package org.example.international.invoice;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -8,10 +8,9 @@ import java.time.LocalDate;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
-@Table(name = "invoice")
-@SequenceGenerator(name = "invoice_id_generator", sequenceName = "invoice_id_seq", allocationSize = 1)
-public class Invoice {
-
+@Table(name = "international_invoice")
+@SequenceGenerator(name = "international_invoice_id_generator", sequenceName = "international_invoice_id_seq", allocationSize = 1)
+public class InternationalInvoice {
     private Integer id;
     private LocalDate invoiceDate;
     private LocalDate dueDate;
@@ -19,18 +18,22 @@ public class Invoice {
     private Integer vendorId;
     private Integer debtorId;
     private String description;
+    private String descriptionPl;
     private Double unitAmount;
     private String unitName;
     private BigDecimal unitNetPrice;
     private BigDecimal invoiceAmount;
+    private BigDecimal usdPlnRate;
     private BigDecimal vatRate;
+    private String nbpTableNumber;
+    private LocalDate nbpTableDate;
     private Timestamp created;
     private Timestamp lastupdated;
 
-    public Invoice() {}
+    public InternationalInvoice() {}
 
     @Id
-    @GeneratedValue(generator = "invoice_id_generator", strategy = SEQUENCE)
+    @GeneratedValue(generator = "international_invoice_id_generator", strategy = SEQUENCE)
     public Integer getId() {
         return id;
     }
@@ -93,6 +96,15 @@ public class Invoice {
         this.description = description;
     }
 
+    @Column(name = "description_pl")
+    public String getDescriptionPl() {
+        return descriptionPl;
+    }
+
+    public void setDescriptionPl(String descriptionPl) {
+        this.descriptionPl = descriptionPl;
+    }
+
     @Column(name = "unit_amount")
     public Double getUnitAmount() {
         return unitAmount;
@@ -129,6 +141,15 @@ public class Invoice {
         this.invoiceAmount = invoiceAmount;
     }
 
+    @Column(name = "usd_pln_rate")
+    public BigDecimal getUsdPlnRate() {
+        return usdPlnRate;
+    }
+
+    public void setUsdPlnRate(BigDecimal usdPlnRate) {
+        this.usdPlnRate = usdPlnRate;
+    }
+
     @Column(name = "vat_rate")
     public BigDecimal getVatRate() {
         return vatRate;
@@ -136,6 +157,24 @@ public class Invoice {
 
     public void setVatRate(BigDecimal vatRate) {
         this.vatRate = vatRate;
+    }
+
+    @Column(name = "nbp_table_number")
+    public String getNbpTableNumber() {
+        return nbpTableNumber;
+    }
+
+    public void setNbpTableNumber(String nbpTableNumber) {
+        this.nbpTableNumber = nbpTableNumber;
+    }
+
+    @Column(name = "nbp_table_date")
+    public LocalDate getNbpTableDate() {
+        return nbpTableDate;
+    }
+
+    public void setNbpTableDate(LocalDate nbpTableDate) {
+        this.nbpTableDate = nbpTableDate;
     }
 
     @Column(name = "created")

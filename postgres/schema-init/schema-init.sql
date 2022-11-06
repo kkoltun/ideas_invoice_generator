@@ -9,6 +9,27 @@ CREATE TABLE invoice
     vendor_id        INTEGER        NOT NULL,
     debtor_id        INTEGER        NOT NULL,
     description      VARCHAR(255)   NOT NULL,
+    unit_amount      NUMERIC(19, 6) NOT NULL,
+    unit_name        VARCHAR(55)    NOT NULL,
+    unit_net_price   NUMERIC(19, 2) NOT NULL,
+    invoice_amount   NUMERIC(19, 2) NOT NULL,
+    usd_pln_rate     NUMERIC(19, 4),
+    vat_rate         NUMERIC(19, 2),
+    created          TIMESTAMP      NOT NULL,
+    lastupdated      TIMESTAMP      NOT NULL
+);
+
+CREATE SEQUENCE invoice_id_seq;
+
+CREATE TABLE international_invoice
+(
+    id               INTEGER        NOT NULL PRIMARY KEY,
+    invoice_date     DATE           NOT NULL,
+    due_date         DATE           NOT NULL,
+    invoice_number   VARCHAR(255)   NOT NULL UNIQUE,
+    vendor_id        INTEGER        NOT NULL,
+    debtor_id        INTEGER        NOT NULL,
+    description      VARCHAR(255)   NOT NULL,
     description_pl   VARCHAR(255)   NOT NULL,
     unit_amount      NUMERIC(19, 6) NOT NULL,
     unit_name        VARCHAR(55)    NOT NULL,
@@ -22,7 +43,9 @@ CREATE TABLE invoice
     lastupdated      TIMESTAMP      NOT NULL
 );
 
-CREATE TABLE actor
+CREATE SEQUENCE international_invoice_id_seq;
+
+CREATE TABLE company
 (
     id                  INTEGER      NOT NULL PRIMARY KEY,
     name                VARCHAR(255) NOT NULL,
@@ -33,3 +56,5 @@ CREATE TABLE actor
     created             TIMESTAMP    NOT NULL,
     lastupdated         TIMESTAMP    NOT NULL
 );
+
+CREATE SEQUENCE company_id_seq;

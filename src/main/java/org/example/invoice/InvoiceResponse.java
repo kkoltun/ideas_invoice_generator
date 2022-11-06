@@ -1,17 +1,14 @@
-package org.example.simple;
+package org.example.invoice;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.example.company.Company;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class HourlyInvoiceDto {
+public class InvoiceResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate fromDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate toDate;
+    private LocalDate invoiceDate;
     private String invoiceNumber;
     private double unitAmount;
     private BigDecimal unitNetPrice;
@@ -19,20 +16,12 @@ public class HourlyInvoiceDto {
     private String debtorRegistrationNumber;
     private String vendorRegistrationNumber;
 
-    public LocalDate getFromDate() {
-        return fromDate;
+    public LocalDate getInvoiceDate() {
+        return invoiceDate;
     }
 
-    public void setFromDate(LocalDate fromDate) {
-        this.fromDate = fromDate;
-    }
-
-    public LocalDate getToDate() {
-        return toDate;
-    }
-
-    public void setToDate(LocalDate toDate) {
-        this.toDate = toDate;
+    public void setInvoiceDate(LocalDate invoiceDate) {
+        this.invoiceDate = invoiceDate;
     }
 
     public String getInvoiceNumber() {
@@ -81,5 +70,17 @@ public class HourlyInvoiceDto {
 
     public void setVendorRegistrationNumber(String vendorRegistrationNumber) {
         this.vendorRegistrationNumber = vendorRegistrationNumber;
+    }
+
+    public static InvoiceResponse of(Invoice invoice, Company debtor, Company vendor) {
+        InvoiceResponse response = new InvoiceResponse();
+        response.setInvoiceNumber(invoice.getInvoiceNumber());
+        response.setInvoiceAmount(invoice.getInvoiceAmount());
+        response.setInvoiceDate(invoice.getInvoiceDate());
+        response.setUnitAmount(invoice.getUnitAmount());
+        response.setUnitNetPrice(invoice.getUnitNetPrice());
+        response.setDebtorRegistrationNumber(debtor.getRegistrationNumber());
+        response.setVendorRegistrationNumber(vendor.getRegistrationNumber());
+        return response;
     }
 }

@@ -1,13 +1,13 @@
-package org.example.simple;
+package org.example.company;
 
-public class InvoiceActorDto {
+public class CompanyDto {
     private String name;
     private String addressLine1;
     private String addressLine2;
     private String addressLine3;
     private String registrationNumber;
 
-    public InvoiceActorDto() {
+    public CompanyDto() {
     }
 
     public String getName() {

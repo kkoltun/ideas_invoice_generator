@@ -1,6 +1,6 @@
-### Add new invoice actor 1
+### Add new company 1
 
-POST http://localhost:8080/simple/actor
+POST http://localhost:8080/company/
 Content-Type: application/json
 
 {
@@ -11,9 +11,9 @@ Content-Type: application/json
   "registrationNumber": "123"
 }
 
-### Add new invoice actor 2
+### Add new company 2
 
-POST http://localhost:8080/simple/actor
+POST http://localhost:8080/company
 Content-Type: application/json
 
 {
@@ -26,32 +26,38 @@ Content-Type: application/json
 
 ### Add a new invoice for hourly service
 
-POST http://localhost:8080/simple/hourly
+POST http://localhost:8080/invoice/hourly
 Content-Type: application/json
 
 {
-  "fromDate": "31/01/2020",
-  "toDate": "06/02/2020",
-  "invoiceNumber": "01",
-  "unitAmount": 42,
-  "unitNetPrice": 10,
-  "invoiceAmount": 420,
+  "fromDate": "15/09/2022",
+  "toDate": "31/10/2022",
+  "invoiceNumber": "EX/1",
+  "unitAmount": 10,
+  "unitNetPrice": 22,
+  "invoiceAmount": 220,
   "debtorRegistrationNumber": "123",
   "vendorRegistrationNumber": "567"
 }
 
-### Generate a PDF version of the invoice
+### Get the PDF representation of the invoice
 
-GET http://localhost:8080/pdf/01
+GET http://localhost:8080/invoice?invoice_number=EX/1
+Accept: application/pdf
+
+### Get the JSON representation of the invoice
+
+GET http://localhost:8080/invoice?invoice_number=EX/1
+Accept: application/json
 
 ### Delete added invoice
 
-DELETE http://localhost:8080/simple/invoice/01
+DELETE http://localhost:8080/invoice?invoice_number=EX/1
 
 ### Delete added invoice actor 1
 
-DELETE http://localhost:8080/simple/actor/123
+DELETE http://localhost:8080/company/123
 
 ### Delete added invoice actor 2
 
-DELETE http://localhost:8080/simple/actor/567
+DELETE http://localhost:8080/company/567

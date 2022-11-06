@@ -4,12 +4,20 @@ A PoC of the service used to record and generate invoices.
 
 ## Todo
 
+Technical:
 1. Tests
-2. Infrastructure (database) extracted out. Abstraction for this.
+2. Better handling of the database connection, closing of the resources.
 3. NBP service caching responses in DB.
-4. Add PLN invoice.
-5. "document" instead of PDF, format adjusted in the request header
-6. Update the "created" and "lastupdated" fields correctly and automatically
+4. Update the "created" and "lastupdated" fields correctly and automatically
+5. Limit the number public classes and methods
+6. Add linting tool, -Wall and spotbugs.
+7. Add exception mapping for controllers
+8. Central point for all invoices (international and national)? How to handle this?
+
+Business:
+1. Can an international invoice & national invoice with the same number exist in the system?
+2. The same debtor has to be duplicated if they have international & national invoices (PL[NIP] and [NIP]).
+3. Removing company with any invoices should not be possible.
 
 Queue:
 1. New invoice -> add to queue.

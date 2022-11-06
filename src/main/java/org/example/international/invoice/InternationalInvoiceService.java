@@ -1,4 +1,4 @@
-package org.example.invoice;
+package org.example.international.invoice;
 
 import org.springframework.stereotype.Component;
 
@@ -10,21 +10,21 @@ import java.util.List;
 import static org.example.infrastructure.Database.getEntityManagerFactory;
 
 @Component
-public class InvoiceService {
+public class InternationalInvoiceService {
 
     private final EntityManagerFactory entityManagerFactory;
 
-    public InvoiceService() {
+    public InternationalInvoiceService() {
         entityManagerFactory = getEntityManagerFactory();
     }
 
-    public Invoice getInvoice(String invoiceNumber) {
+    public InternationalInvoice getInvoice(String invoiceNumber) {
         EntityManager manager = entityManagerFactory.createEntityManager();
 
-        List<Invoice> internationalInvoices = manager.createQuery("" +
+        List<InternationalInvoice> internationalInvoices = manager.createQuery("" +
                         "SELECT invoice " +
-                        "FROM Invoice invoice " +
-                        "WHERE invoice.invoiceNumber = :invoiceNumber", Invoice.class)
+                        "FROM InternationalInvoice invoice " +
+                        "WHERE invoice.invoiceNumber = :invoiceNumber", InternationalInvoice.class)
                 .setParameter("invoiceNumber", invoiceNumber)
                 .getResultList();
 
@@ -33,39 +33,39 @@ public class InvoiceService {
                 : null;
     }
 
-    public void addInvoice(Invoice invoice) throws InvoiceNumberAlreadyExistsException {
+    public void addInvoice(InternationalInvoice internationalInvoice) throws InvoiceNumberAlreadyExistsException {
         EntityManager manager = entityManagerFactory.createEntityManager();
 
         boolean invoiceNumberExists = manager.createQuery("" +
                         "SELECT invoice " +
-                        "FROM Invoice invoice " +
-                        "WHERE invoice.invoiceNumber = :invoiceNumber ", Invoice.class)
-                .setParameter("invoiceNumber", invoice.getInvoiceNumber())
+                        "FROM InternationalInvoice invoice " +
+                        "WHERE invoice.invoiceNumber = :invoiceNumber ", InternationalInvoice.class)
+                .setParameter("invoiceNumber", internationalInvoice.getInvoiceNumber())
                 .getResultList().size() > 0;
         if (invoiceNumberExists) {
-            throw new InvoiceNumberAlreadyExistsException(invoice.getInvoiceNumber());
+            throw new InvoiceNumberAlreadyExistsException(internationalInvoice.getInvoiceNumber());
         }
 
         // todo check the added invoice
 
         EntityTransaction transaction = manager.getTransaction();
         transaction.begin();
-        manager.persist(invoice);
+        manager.persist(internationalInvoice);
         transaction.commit();
 
         manager.close();
     }
 
-    public void deleteInvoice(Invoice invoice) {
+    public void deleteInvoice(InternationalInvoice internationalInvoice) {
         EntityManager manager = entityManagerFactory.createEntityManager();
 
         EntityTransaction transaction = manager.getTransaction();
         transaction.begin();
 
         manager.createQuery("" +
-                        "DELETE FROM Invoice invoice " +
+                        "DELETE FROM InternationalInvoice invoice " +
                         "WHERE invoice.id = :id")
-                .setParameter("id", invoice.getId())
+                .setParameter("id", internationalInvoice.getId())
                 .executeUpdate();
 
         transaction.commit();

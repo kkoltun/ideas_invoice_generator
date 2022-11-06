@@ -1,4 +1,4 @@
-package org.example.simple;
+package org.example.international.invoice;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
