@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Invoice" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="523" leftMargin="36" rightMargin="36" topMargin="36" bottomMargin="36" whenResourceMissingType="Empty" uuid="cc45f9e1-65ea-4a2f-b2db-c05397469967">
-	<property name="ireport.zoom" value="1.948717100000002"/>
+	<property name="ireport.zoom" value="4.594972986357225"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="35"/>
+	<property name="ireport.y" value="1968"/>
 	<style name="Base" isDefault="true" fontName="SansSerif" pdfEncoding="Cp1250"/>
 	<parameter name="invoice_id" class="java.lang.Integer"/>
 	<parameter name="decimal_format" class="java.text.DecimalFormat" isForPrompting="false">
@@ -317,7 +317,7 @@ WHERE invoice.id = $P{invoice_id}]]>
 				<textFieldExpression><![CDATA[$F{vendor_address_line_2}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="159" width="250" height="15" uuid="c137b3fc-4844-423d-b16e-b0e9e13030d0"/>
+				<reportElement x="0" y="144" width="250" height="15" uuid="c137b3fc-4844-423d-b16e-b0e9e13030d0"/>
 				<box>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -328,18 +328,6 @@ WHERE invoice.id = $P{invoice_id}]]>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA["NIP: " + $F{vendor_registration_number}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="273" y="145" width="250" height="15" uuid="3bafa9fe-c1e9-442d-9b81-2f54dbf4a65d"/>
-				<box>
-					<leftPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement>
-					<font size="10" isBold="true"/>
-					<paragraph leftIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{debtor_address_line_3}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="273" y="115" width="250" height="15" uuid="f19b48dc-b86f-4e04-973f-cfd456611268"/>
@@ -602,19 +590,7 @@ WHERE invoice.id = $P{invoice_id}]]>
 				<textFieldExpression><![CDATA[$V{gross_value}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="144" width="250" height="15" uuid="41365672-8374-4232-9059-f5d86eab66ca"/>
-				<box>
-					<leftPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement>
-					<font size="10" isBold="true"/>
-					<paragraph leftIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{vendor_address_line_3}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="273" y="160" width="250" height="15" uuid="ef9ece73-6b1d-4efe-9f68-ddd97c4896d5"/>
+				<reportElement x="273" y="145" width="250" height="15" uuid="ef9ece73-6b1d-4efe-9f68-ddd97c4896d5"/>
 				<box>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -683,68 +659,40 @@ WHERE invoice.id = $P{invoice_id}]]>
 			</staticText>
 		</band>
 		<band height="115">
-			<staticText>
-				<reportElement x="0" y="15" width="128" height="15" uuid="1dd1587d-d7eb-4e54-90f0-958a56ad9520"/>
-				<textElement verticalAlignment="Middle">
-					<font size="10" isBold="true" isItalic="true"/>
-				</textElement>
-				<text><![CDATA[Payment method]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="128" y="15" width="222" height="15" uuid="fec8e44e-f78b-454c-9ece-71e93bf92c78"/>
-				<textElement verticalAlignment="Middle">
-					<font size="10" isBold="true" isItalic="true"/>
-				</textElement>
-				<text><![CDATA[Bank transfer]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="30" width="128" height="15" uuid="e0796818-2b96-403e-b550-171a677464d8"/>
-				<textElement verticalAlignment="Middle">
-					<font size="10" isBold="true" isItalic="false"/>
-				</textElement>
-				<text><![CDATA[Termin płatności]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="45" width="128" height="15" uuid="1892f937-c008-4d2f-b41f-fde2cfa390b0"/>
-				<textElement verticalAlignment="Middle">
-					<font size="10" isBold="true" isItalic="true"/>
-				</textElement>
-				<text><![CDATA[Due date]]></text>
-			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="128" y="30" width="222" height="30" uuid="2de4c758-653d-4979-b39f-e655a4a73311"/>
+				<reportElement x="128" y="15" width="222" height="15" uuid="2de4c758-653d-4979-b39f-e655a4a73311"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{due_date}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="60" width="128" height="15" uuid="efafd0e3-ba9a-4cd5-a1ae-2959b03a4c63"/>
+				<reportElement x="0" y="0" width="128" height="15" uuid="7711dfa5-28b4-4016-824e-465343c936e6"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Sposób płatności]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="15" width="128" height="15" uuid="e0796818-2b96-403e-b550-171a677464d8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Termin płatności]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="30" width="128" height="15" uuid="efafd0e3-ba9a-4cd5-a1ae-2959b03a4c63"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[Nr rachunku bankowego]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="75" width="128" height="15" uuid="7af79c7b-21cf-4e08-9527-3b4abaa168d4"/>
-				<textElement verticalAlignment="Middle">
-					<font size="10" isBold="true" isItalic="true"/>
-				</textElement>
-				<text><![CDATA[Bank account]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="128" y="60" width="222" height="30" uuid="7500b873-2b91-440c-b457-72eca50698f6"/>
+				<reportElement x="128" y="30" width="222" height="15" uuid="7500b873-2b91-440c-b457-72eca50698f6"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[71 1140 2004 0000 3302 7005 5231]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="0" width="128" height="15" uuid="7711dfa5-28b4-4016-824e-465343c936e6"/>
-				<textElement verticalAlignment="Middle">
-					<font size="10" isBold="true" isItalic="false"/>
-				</textElement>
-				<text><![CDATA[Sposób płatności]]></text>
+				<text><![CDATA[71 1140 2004 0000 3302 7905 5231]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="128" y="0" width="222" height="15" uuid="718b82e2-d1c7-43cf-bfe1-6248dc1aea0d"/>
