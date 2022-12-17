@@ -13,6 +13,13 @@ Technical:
 6. Add linting tool, -Wall and spotbugs.
 7. Add exception mapping for controllers
 8. Central point for all invoices (international and national)? How to handle this?
+9. Specify accounts in the DB instead of hardcoding them in the invoice.
+10. Put the db credentials somewhere safe.
+
+Tests:
+1. Tests with test containers.
+2. PDF and other exporters as a separate service, everything ran in a docker container.
+3. "Test" and "prod" envs with different databases and services.
 
 Business:
 1. Can an international invoice & national invoice with the same number exist in the system?

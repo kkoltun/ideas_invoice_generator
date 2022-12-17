@@ -9,6 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 import static org.springframework.http.MediaType.APPLICATION_PDF;
 
 @RestController
@@ -23,6 +32,31 @@ class InvoiceController {
         this.invoiceFacade = invoiceFacade;
         this.pdfService = pdfService;
         this.companyService = companyService;
+    }
+
+    @GetMapping
+    public Iterable<InvoiceResponse> getInvoices() {
+        Iterable<Invoice> invoices = invoiceFacade.getInvoices();
+        Set<Integer> debtors = stream(invoices)
+                .map(Invoice::getDebtorId)
+                .collect(Collectors.toSet());
+        Set<Integer> vendors = stream(invoices)
+                .map(Invoice::getVendorId)
+                .collect(Collectors.toSet());
+
+        Map<Integer, Company> companies = StreamSupport.stream(companyService.getCompaniesByIds(sum(debtors, vendors)).spliterator(), false)
+                .collect(Collectors.toMap(Company::getId, Function.identity()));
+
+        return stream(invoices)
+                .map(invoice -> InvoiceResponse.builder(invoice)
+                        .setDebtor(companies.get(invoice.getDebtorId()))
+                        .setVendor(companies.get(invoice.getVendorId())))
+                .map(InvoiceResponse.Builder::build)
+                .toList();
+    }
+
+    private static <T> Stream<T> stream(Iterable<T> invoices) {
+        return StreamSupport.stream(invoices.spliterator(), false);
     }
 
     @GetMapping(produces = "application/pdf")
@@ -66,5 +100,12 @@ class InvoiceController {
     @DeleteMapping()
     public void deleteInvoice(@RequestParam("invoice_number") String invoiceNumber) {
         invoiceFacade.deleteInvoice(invoiceNumber);
+    }
+
+    private static Set<Integer> sum(Collection<Integer> first, Collection<Integer> second) {
+        Set<Integer> sum = new HashSet<>();
+        sum.addAll(first);
+        sum.addAll(second);
+        return sum;
     }
 }

@@ -1,6 +1,6 @@
 package org.example.invoice;
 
-public class InvoiceNumberAlreadyExistsException extends RuntimeException{
+public class InvoiceNumberAlreadyExistsException extends RuntimeException {
     private final String invoiceNumber;
 
     public InvoiceNumberAlreadyExistsException(String invoiceNumber) {

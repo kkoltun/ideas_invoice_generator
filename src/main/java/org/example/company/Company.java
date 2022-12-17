@@ -1,13 +1,12 @@
 package org.example.company;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
 import java.sql.Timestamp;
 
-import static javax.persistence.GenerationType.SEQUENCE;
-
-@Entity
-@Table(name = "company")
-@SequenceGenerator(name = "company_id_generator", sequenceName = "company_id_seq", allocationSize = 1)
+@Table("company")
 public class Company {
     private Integer id;
     private String name;
@@ -22,7 +21,6 @@ public class Company {
     }
 
     @Id
-    @GeneratedValue(generator = "company_id_generator", strategy = SEQUENCE)
     public Integer getId() {
         return id;
     }
@@ -31,7 +29,7 @@ public class Company {
         this.id = id;
     }
 
-    @Column(name = "name")
+    @Column("name")
     public String getName() {
         return name;
     }
@@ -40,7 +38,7 @@ public class Company {
         this.name = name;
     }
 
-    @Column(name = "address_line_1")
+    @Column("address_line_1")
     public String getAddressLine1() {
         return addressLine1;
     }
@@ -49,7 +47,7 @@ public class Company {
         this.addressLine1 = addressLine1;
     }
 
-    @Column(name = "address_line_2")
+    @Column("address_line_2")
     public String getAddressLine2() {
         return addressLine2;
     }
@@ -58,7 +56,7 @@ public class Company {
         this.addressLine2 = addressLine2;
     }
 
-    @Column(name = "address_line_3")
+    @Column("address_line_3")
     public String getAddressLine3() {
         return addressLine3;
     }
@@ -67,7 +65,7 @@ public class Company {
         this.addressLine3 = addressLine3;
     }
 
-    @Column(name = "registration_number")
+    @Column("registration_number")
     public String getRegistrationNumber() {
         return registrationNumber;
     }
@@ -76,7 +74,7 @@ public class Company {
         this.registrationNumber = idNumber;
     }
 
-    @Column(name = "created")
+    @Column("created")
     public Timestamp getCreated() {
         return created;
     }
@@ -85,7 +83,7 @@ public class Company {
         this.created = created;
     }
 
-    @Column(name = "lastupdated")
+    @Column("lastupdated")
     public Timestamp getLastupdated() {
         return lastupdated;
     }

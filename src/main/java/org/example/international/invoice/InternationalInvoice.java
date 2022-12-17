@@ -1,15 +1,14 @@
 package org.example.international.invoice;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
-import static javax.persistence.GenerationType.SEQUENCE;
-
-@Entity
-@Table(name = "international_invoice")
-@SequenceGenerator(name = "international_invoice_id_generator", sequenceName = "international_invoice_id_seq", allocationSize = 1)
+@Table("international_invoice")
 public class InternationalInvoice {
     private Integer id;
     private LocalDate invoiceDate;
@@ -30,10 +29,10 @@ public class InternationalInvoice {
     private Timestamp created;
     private Timestamp lastupdated;
 
-    public InternationalInvoice() {}
+    public InternationalInvoice() {
+    }
 
     @Id
-    @GeneratedValue(generator = "international_invoice_id_generator", strategy = SEQUENCE)
     public Integer getId() {
         return id;
     }
@@ -42,7 +41,7 @@ public class InternationalInvoice {
         this.id = id;
     }
 
-    @Column(name = "invoice_date")
+    @Column("invoice_date")
     public LocalDate getInvoiceDate() {
         return invoiceDate;
     }
@@ -51,7 +50,7 @@ public class InternationalInvoice {
         this.invoiceDate = invoice_date;
     }
 
-    @Column(name = "due_date")
+    @Column("due_date")
     public LocalDate getDueDate() {
         return dueDate;
     }
@@ -60,7 +59,7 @@ public class InternationalInvoice {
         this.dueDate = due_date;
     }
 
-    @Column(name = "invoice_number")
+    @Column("invoice_number")
     public String getInvoiceNumber() {
         return invoiceNumber;
     }
@@ -69,7 +68,7 @@ public class InternationalInvoice {
         this.invoiceNumber = invoiceNumber;
     }
 
-    @Column(name = "vendor_id")
+    @Column("vendor_id")
     public Integer getVendorId() {
         return vendorId;
     }
@@ -78,7 +77,7 @@ public class InternationalInvoice {
         this.vendorId = vendorId;
     }
 
-    @Column(name = "debtor_id")
+    @Column("debtor_id")
     public Integer getDebtorId() {
         return debtorId;
     }
@@ -87,7 +86,7 @@ public class InternationalInvoice {
         this.debtorId = debtorId;
     }
 
-    @Column(name = "description")
+    @Column("description")
     public String getDescription() {
         return description;
     }
@@ -96,7 +95,7 @@ public class InternationalInvoice {
         this.description = description;
     }
 
-    @Column(name = "description_pl")
+    @Column("description_pl")
     public String getDescriptionPl() {
         return descriptionPl;
     }
@@ -105,7 +104,7 @@ public class InternationalInvoice {
         this.descriptionPl = descriptionPl;
     }
 
-    @Column(name = "unit_amount")
+    @Column("unit_amount")
     public Double getUnitAmount() {
         return unitAmount;
     }
@@ -114,7 +113,7 @@ public class InternationalInvoice {
         this.unitAmount = amount;
     }
 
-    @Column(name = "unit_name")
+    @Column("unit_name")
     public String getUnitName() {
         return unitName;
     }
@@ -123,7 +122,7 @@ public class InternationalInvoice {
         this.unitName = unit;
     }
 
-    @Column(name = "unit_net_price")
+    @Column("unit_net_price")
     public BigDecimal getUnitNetPrice() {
         return unitNetPrice;
     }
@@ -132,7 +131,7 @@ public class InternationalInvoice {
         this.unitNetPrice = netPrice;
     }
 
-    @Column(name = "invoice_amount")
+    @Column("invoice_amount")
     public BigDecimal getInvoiceAmount() {
         return invoiceAmount;
     }
@@ -141,7 +140,7 @@ public class InternationalInvoice {
         this.invoiceAmount = invoiceAmount;
     }
 
-    @Column(name = "usd_pln_rate")
+    @Column("usd_pln_rate")
     public BigDecimal getUsdPlnRate() {
         return usdPlnRate;
     }
@@ -150,7 +149,7 @@ public class InternationalInvoice {
         this.usdPlnRate = usdPlnRate;
     }
 
-    @Column(name = "vat_rate")
+    @Column("vat_rate")
     public BigDecimal getVatRate() {
         return vatRate;
     }
@@ -159,7 +158,7 @@ public class InternationalInvoice {
         this.vatRate = vatRate;
     }
 
-    @Column(name = "nbp_table_number")
+    @Column("nbp_table_number")
     public String getNbpTableNumber() {
         return nbpTableNumber;
     }
@@ -168,7 +167,7 @@ public class InternationalInvoice {
         this.nbpTableNumber = nbpTableNumber;
     }
 
-    @Column(name = "nbp_table_date")
+    @Column("nbp_table_date")
     public LocalDate getNbpTableDate() {
         return nbpTableDate;
     }
@@ -177,7 +176,7 @@ public class InternationalInvoice {
         this.nbpTableDate = nbpTableDate;
     }
 
-    @Column(name = "created")
+    @Column("created")
     public Timestamp getCreated() {
         return created;
     }
@@ -186,7 +185,7 @@ public class InternationalInvoice {
         this.created = created;
     }
 
-    @Column(name = "lastupdated")
+    @Column("lastupdated")
     public Timestamp getLastupdated() {
         return lastupdated;
     }

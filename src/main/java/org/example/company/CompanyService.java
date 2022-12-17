@@ -2,22 +2,17 @@ package org.example.company;
 
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.List;
-
-import static org.example.infrastructure.Database.getEntityManagerFactory;
+import java.util.stream.StreamSupport;
 
 @Service
 public class CompanyService {
 
-    private final EntityManagerFactory entityManagerFactory;
+    private final CompanyRepository companyRepository;
 
-    public CompanyService() {
-        entityManagerFactory = getEntityManagerFactory();
+    public CompanyService(CompanyRepository companyRepository) {
+        this.companyRepository = companyRepository;
     }
 
     public void addCompany(CompanyDto companyDto) {
@@ -25,42 +20,20 @@ public class CompanyService {
     }
 
     public void addCompany(Company company) throws CompanyAlreadyExistsException {
-        EntityManager manager = entityManagerFactory.createEntityManager();
-
-        boolean invoiceActorExists = manager.createQuery("" +
-                        "SELECT company " +
-                        "FROM Company company " +
-                        "WHERE company.registrationNumber = :registrationNumber ", Company.class)
-                .setParameter("registrationNumber", company.getRegistrationNumber())
-                .getResultList().size() > 0;
-        if (invoiceActorExists) {
+        boolean companyExists = companyRepository.findByRegistrationNumber(company.getRegistrationNumber())
+                .iterator().hasNext();
+        if (companyExists) {
             throw new CompanyAlreadyExistsException(company.getRegistrationNumber());
         }
 
-        // todo check the added actor
-
-        EntityTransaction transaction = manager.getTransaction();
-        transaction.begin();
-        manager.persist(company);
-        transaction.commit();
-
-        manager.close();
+        // todo check the added company
+        companyRepository.save(company);
     }
 
     public Company getCompany(String companyRegistrationNumber) {
-        // todo not closed
-        EntityManager manager = entityManagerFactory.createEntityManager();
-
-        List<Company> companies = manager.createQuery("" +
-                        "SELECT company " +
-                        "FROM Company company " +
-                        "WHERE company.registrationNumber = :registrationNumber", Company.class)
-                .setParameter("registrationNumber", companyRegistrationNumber)
-                .getResultList();
-
-        return !companies.isEmpty()
-                ? companies.get(0)
-                : null;
+        return StreamSupport.stream(companyRepository.findByRegistrationNumber(companyRegistrationNumber).spliterator(), false)
+                .findAny()
+                .orElse(null);
     }
 
     public Integer getCompanyId(String registrationNumber) {
@@ -73,9 +46,12 @@ public class CompanyService {
     }
 
     public Company getCompanyById(int id) {
-        // todo not closed
-        EntityManager manager = entityManagerFactory.createEntityManager();
-        return manager.find(Company.class, id);
+        return companyRepository.findById(id)
+                .orElse(null);
+    }
+
+    public Iterable<Company> getCompaniesByIds(Iterable<Integer> ids) {
+        return companyRepository.findAllById(ids);
     }
 
     public void deleteCompany(String companyRegistrationNumber) {
@@ -84,23 +60,7 @@ public class CompanyService {
             return;
         }
 
-        deleteCompany(company);
-    }
-
-    public void deleteCompany(Company company) {
-        EntityManager manager = entityManagerFactory.createEntityManager();
-
-        EntityTransaction transaction = manager.getTransaction();
-        transaction.begin();
-
-        manager.createQuery("" +
-                        "DELETE FROM Company actor " +
-                        "WHERE actor.id = :id")
-                .setParameter("id", company.getId())
-                .executeUpdate();
-
-        transaction.commit();
-        manager.close();
+        companyRepository.delete(company);
     }
 
     private Company mapCompany(CompanyDto dto) {

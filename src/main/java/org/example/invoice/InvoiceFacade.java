@@ -21,6 +21,10 @@ public class InvoiceFacade {
         this.companyService = companyService;
     }
 
+    public Iterable<Invoice> getInvoices() {
+        return invoiceService.getInvoices();
+    }
+
     public Invoice getInvoice(String invoiceNumber) {
         return invoiceService.getInvoice(invoiceNumber);
     }

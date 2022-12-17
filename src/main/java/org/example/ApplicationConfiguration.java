@@ -1,22 +1,19 @@
 package org.example;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import javax.sql.DataSource;
 
 @Configuration
-@EnableWebMvc
-@ComponentScan(basePackageClasses = ApplicationLauncher.class)
 public class ApplicationConfiguration {
-
     @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        return objectMapper;
+    public DataSource dataSource() {
+        PGSimpleDataSource ds = new PGSimpleDataSource();
+        ds.setURL("jdbc:postgresql://localhost:5432/invoices");
+        ds.setUser("kkoltun");
+        ds.setPassword("b1rd@tr33");
+        return ds;
     }
-
 }

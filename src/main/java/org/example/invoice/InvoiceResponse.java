@@ -5,6 +5,7 @@ import org.example.company.Company;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class InvoiceResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
@@ -82,5 +83,37 @@ public class InvoiceResponse {
         response.setDebtorRegistrationNumber(debtor.getRegistrationNumber());
         response.setVendorRegistrationNumber(vendor.getRegistrationNumber());
         return response;
+    }
+
+    static Builder builder(Invoice invoice) {
+        return new Builder(invoice);
+    }
+
+    static class Builder {
+        Invoice invoice;
+        Company debtor;
+        Company vendor;
+
+        private Builder(Invoice invoice) {
+            this.invoice = invoice;
+        }
+
+        public Builder setDebtor(Company debtor) {
+            this.debtor = debtor;
+            return this;
+        }
+
+        public Builder setVendor(Company vendor) {
+            this.vendor = vendor;
+            return this;
+        }
+
+        public InvoiceResponse build() {
+            Objects.requireNonNull(invoice);
+            Objects.requireNonNull(debtor);
+            Objects.requireNonNull(vendor);
+
+            return InvoiceResponse.of(invoice, debtor, vendor);
+        }
     }
 }
