@@ -1,0 +1,4 @@
+### Get rate
+
+GET http://localhost:8080/nbp?date=2022-12-15
+Accept: application/json
