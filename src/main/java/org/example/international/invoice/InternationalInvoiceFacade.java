@@ -19,10 +19,12 @@ public class InternationalInvoiceFacade {
     private final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private final InternationalInvoiceService internationalInvoiceService;
     private final CompanyService companyService;
+    private final NbpService nbpService;
 
-    public InternationalInvoiceFacade(InternationalInvoiceService internationalInvoiceService, CompanyService companyService) {
+    public InternationalInvoiceFacade(InternationalInvoiceService internationalInvoiceService, CompanyService companyService, NbpService nbpService) {
         this.internationalInvoiceService = internationalInvoiceService;
         this.companyService = companyService;
+        this.nbpService = nbpService;
     }
 
     public InternationalInvoice getInvoice(String invoiceNumber) {
@@ -58,7 +60,7 @@ public class InternationalInvoiceFacade {
                 hourlyInvoiceDto.getToDate().format(DATE_FORMAT));
 
         LocalDate lastBusinessDay = getNearestBusinessDay(hourlyInvoiceDto.getToDate());
-        NbpRateDto usdPlnRate = new NbpService().getUsdRate(lastBusinessDay);
+        NbpRateDto usdPlnRate = nbpService.getUsdRate(lastBusinessDay).block();
 
         if (!usdPlnRate.getDate().isEqual(lastBusinessDay)) {
             throw new RuntimeException(String.format("Found NBP USD-PLN rate from day [%s] when searching for day [%s].",
@@ -93,7 +95,7 @@ public class InternationalInvoiceFacade {
         LocalDate dueDate = bonusInvoiceDto.getInvoiceDate().plusMonths(2).withDayOfMonth(1);
         LocalDate lastBusinessDay = getNearestBusinessDay(bonusInvoiceDto.getInvoiceDate());
 
-        NbpRateDto usdPlnRate = new NbpService().getUsdRate(lastBusinessDay);
+        NbpRateDto usdPlnRate = nbpService.getUsdRate(lastBusinessDay).block();
 
         if (!usdPlnRate.getDate().isEqual(lastBusinessDay)) {
             throw new RuntimeException(String.format("Found NBP USD-PLN rate from day [%s] when searching for day [%s].",
