@@ -55,10 +55,6 @@ class InvoiceController {
                 .toList();
     }
 
-    private static <T> Stream<T> stream(Iterable<T> invoices) {
-        return StreamSupport.stream(invoices.spliterator(), false);
-    }
-
     @GetMapping(produces = "application/pdf")
     public ResponseEntity<byte[]> getPdf(@RequestParam("invoice_number") String invoiceNumber) {
         Invoice invoice = invoiceFacade.getInvoice(invoiceNumber);
@@ -107,5 +103,9 @@ class InvoiceController {
         sum.addAll(first);
         sum.addAll(second);
         return sum;
+    }
+
+    private static <T> Stream<T> stream(Iterable<T> invoices) {
+        return StreamSupport.stream(invoices.spliterator(), false);
     }
 }
