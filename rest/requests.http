@@ -1,6 +1,6 @@
 ### Add new company 1
 
-POST http://localhost:8080/company/
+POST http://localhost:8080/company
 Content-Type: application/json
 
 {
