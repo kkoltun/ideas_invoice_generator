@@ -5,16 +5,14 @@ A PoC of the service used to record and generate invoices.
 ## Todo
 
 Technical:
-1. Tests
-2. Better handling of the database connection, closing of the resources.
-3. NBP service caching responses in DB.
-4. Update the "created" and "lastupdated" fields correctly and automatically
-5. Limit the number public classes and methods
-6. Add linting tool, -Wall and spotbugs.
-7. Add exception mapping for controllers
-8. Central point for all invoices (international and national)? How to handle this?
-9. Specify accounts in the DB instead of hardcoding them in the invoice.
-10. Put the db credentials somewhere safe.
+1. NBP service caching responses in DB; configure timeouts.
+2. Update the "created" and "lastupdated" fields correctly and automatically
+3. Limit the number public classes and methods
+4. Add linting tool, -Wall and spotbugs.
+5. Add exception mapping for controllers
+6. Central point for all invoices (international and national)? How to handle this?
+7. Specify accounts in the DB instead of hardcoding them in the invoice.
+8. Put the db credentials somewhere safe.
 
 Tests:
 1. Tests with test containers.
@@ -33,6 +31,6 @@ Generator:
 1. New invoice message -> generator gets this and generates a PDF -> saves it somewhere?
 2. Get the invoice PDF -> add to queue synchronously -> either get the PDF or generate it and get.
 
-Actor totals service:
-1. On startup launch and calculate actor totals.
+Company totals service:
+1. On startup launch and calculate company totals.
 2. New invoice message -> add to totals.
