@@ -40,6 +40,11 @@ Content-Type: application/json
   "vendorRegistrationNumber": "567"
 }
 
+### Get all invoices
+
+GET http://localhost:8080/invoice
+Accept: application/json
+
 ### Get the PDF representation of the invoice
 
 GET http://localhost:8080/invoice?invoice_number=EX/1
