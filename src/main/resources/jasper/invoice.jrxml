@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Invoice" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="523" leftMargin="36" rightMargin="36" topMargin="36" bottomMargin="36" whenResourceMissingType="Empty" uuid="cc45f9e1-65ea-4a2f-b2db-c05397469967">
 	<property name="ireport.zoom" value="4.17724816941566"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="2290"/>
+	<property name="ireport.x" value="957"/>
+	<property name="ireport.y" value="658"/>
 	<style name="Base" isDefault="true" fontName="SansSerif" pdfEncoding="Cp1250"/>
 	<parameter name="invoice_id" class="java.lang.Integer"/>
 	<parameter name="decimal_format" class="java.text.DecimalFormat" isForPrompting="false">
@@ -61,11 +61,14 @@ WHERE invoice.id = $P{invoice_id}]]>
 	</variable>
 	<variable name="vat_amount" class="java.math.BigDecimal">
 		<variableExpression><![CDATA[$F{vat_rate} != null
-? $V{net_value} * $F{vat_rate}
+? $V{net_value} * $F{vat_rate} / 100
 : BigDecimal.ZERO]]></variableExpression>
 	</variable>
 	<variable name="gross_value" class="java.math.BigDecimal">
 		<variableExpression><![CDATA[$V{net_value} + $V{vat_amount}]]></variableExpression>
+	</variable>
+	<variable name="vat_rate_percent" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{vat_rate} != null ? $F{vat_rate}.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP) : null]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -115,7 +118,7 @@ WHERE invoice.id = $P{invoice_id}]]>
 					<text><![CDATA[Nazwa]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="172" y="0" width="35" height="28" backcolor="#CCCCCC" uuid="f6024162-8f94-4072-aa7c-648b8c64948a"/>
+					<reportElement mode="Opaque" x="172" y="0" width="40" height="28" backcolor="#CCCCCC" uuid="f6024162-8f94-4072-aa7c-648b8c64948a"/>
 					<box>
 						<topPen lineWidth="0.5"/>
 						<leftPen lineWidth="0.5"/>
@@ -127,7 +130,7 @@ WHERE invoice.id = $P{invoice_id}]]>
 					<text><![CDATA[Ilość]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="207" y="0" width="30" height="28" backcolor="#CCCCCC" uuid="f7d5c6e8-aac3-40d3-b7ca-9a72cc568626"/>
+					<reportElement mode="Opaque" x="212" y="0" width="25" height="28" backcolor="#CCCCCC" uuid="f7d5c6e8-aac3-40d3-b7ca-9a72cc568626"/>
 					<box>
 						<topPen lineWidth="0.5"/>
 						<leftPen lineWidth="0.5"/>
@@ -408,7 +411,7 @@ WHERE invoice.id = $P{invoice_id}]]>
 				</textElement>
 				<text><![CDATA[X]]></text>
 			</staticText>
-			<textField pattern="#,##0.00">
+			<textField pattern="#,##0 %">
 				<reportElement x="357" y="351" width="46" height="17" uuid="2251ce1f-1ff7-4e24-b5dd-d609ea7eb19e"/>
 				<box>
 					<topPen lineWidth="0.5"/>
@@ -420,22 +423,8 @@ WHERE invoice.id = $P{invoice_id}]]>
 					<font size="10" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{vat_rate} != null ? $F{vat_rate} : "ZW"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{vat_rate_percent} != null ? $V{vat_rate_percent} : "ZW"]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="403" y="335" width="60" height="16" uuid="030551f1-4912-43cf-b4f8-a4287e373e2e"/>
-				<box>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true" isItalic="false"/>
-					<paragraph rightIndent="5"/>
-				</textElement>
-				<text><![CDATA[-]]></text>
-			</staticText>
 			<textField pattern="#,##0.00">
 				<reportElement x="403" y="351" width="60" height="17" uuid="d4af053c-e8cf-41fe-8a12-0ac37af06b9e"/>
 				<box>
@@ -478,7 +467,7 @@ WHERE invoice.id = $P{invoice_id}]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{gross_value}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00">
+			<textField pattern="#,##0 %">
 				<reportElement x="357" y="278" width="46" height="57" uuid="d25b1a09-7a01-4dbd-b582-2fd021c88300"/>
 				<box>
 					<topPen lineWidth="0.5"/>
@@ -490,7 +479,7 @@ WHERE invoice.id = $P{invoice_id}]]>
 					<font size="10" isBold="false"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{vat_rate} != null ? $F{vat_rate} : "ZW"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{vat_rate_percent} != null ? $V{vat_rate_percent} : "ZW"]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement x="297" y="278" width="60" height="57" uuid="6d78fa2f-02a1-4b0f-8aa5-6aa2513e0d0c"/>
@@ -521,7 +510,7 @@ WHERE invoice.id = $P{invoice_id}]]>
 				<textFieldExpression><![CDATA[$V{vat_amount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="207" y="278" width="30" height="57" uuid="39c4bd7d-9acf-4a0f-810e-b666633ace9c"/>
+				<reportElement x="212" y="278" width="25" height="57" uuid="39c4bd7d-9acf-4a0f-810e-b666633ace9c"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -537,14 +526,14 @@ WHERE invoice.id = $P{invoice_id}]]>
 : "-"]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="172" y="278" width="35" height="57" uuid="9b5da5f9-e12b-4afd-b63a-fb323e2003d2"/>
+				<reportElement x="172" y="278" width="40" height="57" uuid="9b5da5f9-e12b-4afd-b63a-fb323e2003d2"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="false"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
@@ -657,6 +646,20 @@ WHERE invoice.id = $P{invoice_id}]]>
 				</textElement>
 				<text><![CDATA[W TYM VAT]]></text>
 			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="403" y="335" width="60" height="16" uuid="675379e8-9413-48c9-88c6-924864ebdbb5"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vat_amount}]]></textFieldExpression>
+			</textField>
 		</band>
 		<band height="115">
 			<textField pattern="dd/MM/yyyy">
@@ -704,14 +707,18 @@ WHERE invoice.id = $P{invoice_id}]]>
 		</band>
 		<band height="90">
 			<staticText>
-				<reportElement x="0" y="0" width="350" height="15" uuid="7711dfa5-28b4-4016-824e-465343c936e6"/>
+				<reportElement x="0" y="0" width="350" height="15" uuid="7711dfa5-28b4-4016-824e-465343c936e6">
+					<printWhenExpression><![CDATA[$F{vat_rate} == null]]></printWhenExpression>
+				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[Uwagi:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="15" width="350" height="15" uuid="14a0b29d-bf90-4434-a61d-dad84902ff59"/>
+				<reportElement x="0" y="15" width="350" height="15" uuid="14a0b29d-bf90-4434-a61d-dad84902ff59">
+					<printWhenExpression><![CDATA[$F{vat_rate} == null]]></printWhenExpression>
+				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="true" isItalic="false"/>
 				</textElement>

@@ -2,6 +2,8 @@ package org.example.invoice;
 
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.stream.StreamSupport;
 
 @Component
@@ -29,6 +31,9 @@ public class InvoiceService {
             throw new InvoiceNumberAlreadyExistsException(invoice.getInvoiceNumber());
         }
 
+        BigDecimal vat = invoice.getInvoiceAmount().multiply(BigDecimal.valueOf(23))
+                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
+                .setScale(2, RoundingMode.HALF_UP);
         // todo check the added invoice
         invoiceRepository.save(invoice);
     }

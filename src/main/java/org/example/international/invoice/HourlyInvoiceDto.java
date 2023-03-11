@@ -14,6 +14,7 @@ public class HourlyInvoiceDto {
     private double unitAmount;
     private BigDecimal unitNetPrice;
     private BigDecimal invoiceAmount;
+    private BigDecimal vatRate;
     private String debtorRegistrationNumber;
     private String vendorRegistrationNumber;
 
@@ -63,6 +64,14 @@ public class HourlyInvoiceDto {
 
     public void setInvoiceAmount(BigDecimal invoiceAmount) {
         this.invoiceAmount = invoiceAmount;
+    }
+
+    public BigDecimal getVatRate() {
+        return vatRate;
+    }
+
+    public void setVatRate(BigDecimal vatRate) {
+        this.vatRate = vatRate;
     }
 
     public String getDebtorRegistrationNumber() {

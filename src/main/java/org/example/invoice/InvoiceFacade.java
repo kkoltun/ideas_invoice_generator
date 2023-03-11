@@ -46,7 +46,7 @@ public class InvoiceFacade {
         LocalDate invoiceDate = hourlyInvoiceDto.getToDate();
         LocalDate dueDate = invoiceDate.plusDays(14);
 
-        String description = String.format("Realizacja zadań związanych z oprogramowaniem w dniach %s - %s zgodnie z umową z dnia 03.10.2022",
+        String description = String.format("Realizacja zadań związanych z oprogramowaniem w dniach %s - %s zgodnie z umową z dnia 23.01.2023",
                 hourlyInvoiceDto.getFromDate().format(DATE_FORMAT),
                 hourlyInvoiceDto.getToDate().format(DATE_FORMAT));
 
@@ -61,7 +61,7 @@ public class InvoiceFacade {
         invoice.setUnitName("h");
         invoice.setUnitNetPrice(hourlyInvoiceDto.getUnitNetPrice());
         invoice.setInvoiceAmount(hourlyInvoiceDto.getInvoiceAmount());
-        invoice.setVatRate(null);
+        invoice.setVatRate(hourlyInvoiceDto.getVatRate());
         Timestamp timestamp = Timestamp.from(Instant.now());
         invoice.setCreated(timestamp);
         invoice.setLastupdated(timestamp);
