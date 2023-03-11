@@ -1,0 +1,68 @@
+### Add new company 1
+
+POST http://localhost:8080/company
+Content-Type: application/json
+
+{
+  "name": "Company X",
+  "addressLine1": "XYZ Street",
+  "addressLine2": "12-345 XYZ",
+  "addressLine3": "Poland",
+  "registrationNumber": "345"
+}
+
+### Add new company 2
+
+POST http://localhost:8080/company
+Content-Type: application/json
+
+{
+  "name": "Company Y",
+  "addressLine1": "ABC Street",
+  "addressLine2": "56-789 ABC",
+  "addressLine3": "Poland",
+  "registrationNumber": "789"
+}
+
+### Add a new invoice for hourly service
+
+POST http://localhost:8080/invoice/international/hourly
+Content-Type: application/json
+
+{
+  "fromDate": "15/09/2022",
+  "toDate": "31/10/2022",
+  "invoiceNumber": "EX/1",
+  "unitAmount": 10,
+  "unitNetPrice": 22,
+  "invoiceAmount": 220,
+  "debtorRegistrationNumber": "123",
+  "vendorRegistrationNumber": "567"
+}
+
+### Get all invoices
+
+GET http://localhost:8080/invoice/international
+Accept: application/json
+
+### Get the PDF representation of the invoice
+
+GET http://localhost:8080/invoice/international?invoice_number=EX/1
+Accept: application/pdf
+
+### Get the JSON representation of the invoice
+
+GET http://localhost:8080/invoice/international?invoice_number=EX/1
+Accept: application/json
+
+### Delete added invoice
+
+DELETE http://localhost:8080/invoice/international?invoice_number=EX/1
+
+### Delete added invoice actor 1
+
+DELETE http://localhost:8080/company/123
+
+### Delete added invoice actor 2
+
+DELETE http://localhost:8080/company/567
