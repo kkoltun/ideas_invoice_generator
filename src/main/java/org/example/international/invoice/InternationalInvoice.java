@@ -1,32 +1,65 @@
 package org.example.international.invoice;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
-@Table("international_invoice")
+@Entity
 public class InternationalInvoice {
+
+    @Id
     private Integer id;
+
+    @Column(name = "invoice_date")
     private LocalDate invoiceDate;
+
+    @Column(name = "due_date")
     private LocalDate dueDate;
+
+    @Column(name = "invoice_number")
     private String invoiceNumber;
+
+    @Column(name = "vendor_id")
     private Integer vendorId;
+
+    @Column(name = "debtor_id")
     private Integer debtorId;
+
     private String description;
+
+    @Column(name = "description_pl")
     private String descriptionPl;
+
+    @Column(name = "unit_amount")
     private Double unitAmount;
+
+    @Column(name = "unit_name")
     private String unitName;
+
+    @Column(name = "unit_net_price")
     private BigDecimal unitNetPrice;
+
+    @Column(name = "invoice_amount")
     private BigDecimal invoiceAmount;
+
+    @Column(name = "usd_pln_rate")
     private BigDecimal usdPlnRate;
+
+    @Column(name = "vat_rate")
     private BigDecimal vatRate;
+
+    @Column(name = "nbp_table_number")
     private String nbpTableNumber;
+
+    @Column(name = "nbp_table_date")
     private LocalDate nbpTableDate;
+
     private Timestamp created;
+
     private Timestamp lastupdated;
 
     public InternationalInvoice() {
@@ -41,7 +74,6 @@ public class InternationalInvoice {
         this.id = id;
     }
 
-    @Column("invoice_date")
     public LocalDate getInvoiceDate() {
         return invoiceDate;
     }
@@ -50,7 +82,6 @@ public class InternationalInvoice {
         this.invoiceDate = invoice_date;
     }
 
-    @Column("due_date")
     public LocalDate getDueDate() {
         return dueDate;
     }
@@ -59,7 +90,6 @@ public class InternationalInvoice {
         this.dueDate = due_date;
     }
 
-    @Column("invoice_number")
     public String getInvoiceNumber() {
         return invoiceNumber;
     }
@@ -68,7 +98,6 @@ public class InternationalInvoice {
         this.invoiceNumber = invoiceNumber;
     }
 
-    @Column("vendor_id")
     public Integer getVendorId() {
         return vendorId;
     }
@@ -77,7 +106,6 @@ public class InternationalInvoice {
         this.vendorId = vendorId;
     }
 
-    @Column("debtor_id")
     public Integer getDebtorId() {
         return debtorId;
     }
@@ -86,7 +114,6 @@ public class InternationalInvoice {
         this.debtorId = debtorId;
     }
 
-    @Column("description")
     public String getDescription() {
         return description;
     }
@@ -95,7 +122,6 @@ public class InternationalInvoice {
         this.description = description;
     }
 
-    @Column("description_pl")
     public String getDescriptionPl() {
         return descriptionPl;
     }
@@ -104,7 +130,6 @@ public class InternationalInvoice {
         this.descriptionPl = descriptionPl;
     }
 
-    @Column("unit_amount")
     public Double getUnitAmount() {
         return unitAmount;
     }
@@ -113,7 +138,6 @@ public class InternationalInvoice {
         this.unitAmount = amount;
     }
 
-    @Column("unit_name")
     public String getUnitName() {
         return unitName;
     }
@@ -122,7 +146,6 @@ public class InternationalInvoice {
         this.unitName = unit;
     }
 
-    @Column("unit_net_price")
     public BigDecimal getUnitNetPrice() {
         return unitNetPrice;
     }
@@ -131,7 +154,6 @@ public class InternationalInvoice {
         this.unitNetPrice = netPrice;
     }
 
-    @Column("invoice_amount")
     public BigDecimal getInvoiceAmount() {
         return invoiceAmount;
     }
@@ -140,7 +162,6 @@ public class InternationalInvoice {
         this.invoiceAmount = invoiceAmount;
     }
 
-    @Column("usd_pln_rate")
     public BigDecimal getUsdPlnRate() {
         return usdPlnRate;
     }
@@ -149,7 +170,6 @@ public class InternationalInvoice {
         this.usdPlnRate = usdPlnRate;
     }
 
-    @Column("vat_rate")
     public BigDecimal getVatRate() {
         return vatRate;
     }
@@ -158,7 +178,6 @@ public class InternationalInvoice {
         this.vatRate = vatRate;
     }
 
-    @Column("nbp_table_number")
     public String getNbpTableNumber() {
         return nbpTableNumber;
     }
@@ -167,7 +186,6 @@ public class InternationalInvoice {
         this.nbpTableNumber = nbpTableNumber;
     }
 
-    @Column("nbp_table_date")
     public LocalDate getNbpTableDate() {
         return nbpTableDate;
     }
@@ -176,7 +194,6 @@ public class InternationalInvoice {
         this.nbpTableDate = nbpTableDate;
     }
 
-    @Column("created")
     public Timestamp getCreated() {
         return created;
     }
@@ -185,7 +202,6 @@ public class InternationalInvoice {
         this.created = created;
     }
 
-    @Column("lastupdated")
     public Timestamp getLastupdated() {
         return lastupdated;
     }

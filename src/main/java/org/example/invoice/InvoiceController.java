@@ -44,7 +44,8 @@ class InvoiceController {
                 .map(Invoice::getVendorId)
                 .collect(Collectors.toSet());
 
-        Map<Integer, Company> companies = StreamSupport.stream(companyService.getCompaniesByIds(sum(debtors, vendors)).spliterator(), false)
+        Map<Integer, Company> companies = companyService.getCompaniesByIds(sum(debtors, vendors))
+                .stream()
                 .collect(Collectors.toMap(Company::getId, Function.identity()));
 
         return stream(invoices)

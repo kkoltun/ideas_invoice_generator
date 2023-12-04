@@ -1,35 +1,59 @@
 package org.example.invoice;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
-@Table("invoice")
+import static jakarta.persistence.GenerationType.IDENTITY;
+
+@Entity
 public class Invoice {
 
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
     private Integer id;
+
+    @Column(name ="invoice_date")
     private LocalDate invoiceDate;
+
+    @Column(name ="due_date")
     private LocalDate dueDate;
+
+    @Column(name ="invoice_number")
     private String invoiceNumber;
+
+    @Column(name ="vendor_id")
     private Integer vendorId;
+
+    @Column(name ="debtor_id")
     private Integer debtorId;
+
     private String description;
+
+    @Column(name ="unit_amount")
     private Double unitAmount;
+
+    @Column(name ="unit_name")
     private String unitName;
+
+    @Column(name ="unit_net_price")
     private BigDecimal unitNetPrice;
+
+    @Column(name ="invoice_amount")
     private BigDecimal invoiceAmount;
+
+    @Column(name ="vat_rate")
     private BigDecimal vatRate;
+
     private Timestamp created;
+
     private Timestamp lastupdated;
 
     public Invoice() {
     }
 
-    @Id
     public Integer getId() {
         return id;
     }
@@ -38,7 +62,6 @@ public class Invoice {
         this.id = id;
     }
 
-    @Column("invoice_date")
     public LocalDate getInvoiceDate() {
         return invoiceDate;
     }
@@ -47,7 +70,6 @@ public class Invoice {
         this.invoiceDate = invoice_date;
     }
 
-    @Column("due_date")
     public LocalDate getDueDate() {
         return dueDate;
     }
@@ -56,7 +78,6 @@ public class Invoice {
         this.dueDate = due_date;
     }
 
-    @Column("invoice_number")
     public String getInvoiceNumber() {
         return invoiceNumber;
     }
@@ -65,7 +86,6 @@ public class Invoice {
         this.invoiceNumber = invoiceNumber;
     }
 
-    @Column("vendor_id")
     public Integer getVendorId() {
         return vendorId;
     }
@@ -74,7 +94,6 @@ public class Invoice {
         this.vendorId = vendorId;
     }
 
-    @Column("debtor_id")
     public Integer getDebtorId() {
         return debtorId;
     }
@@ -83,7 +102,6 @@ public class Invoice {
         this.debtorId = debtorId;
     }
 
-    @Column("description")
     public String getDescription() {
         return description;
     }
@@ -92,7 +110,6 @@ public class Invoice {
         this.description = description;
     }
 
-    @Column("unit_amount")
     public Double getUnitAmount() {
         return unitAmount;
     }
@@ -101,7 +118,6 @@ public class Invoice {
         this.unitAmount = amount;
     }
 
-    @Column("unit_name")
     public String getUnitName() {
         return unitName;
     }
@@ -110,7 +126,6 @@ public class Invoice {
         this.unitName = unit;
     }
 
-    @Column("unit_net_price")
     public BigDecimal getUnitNetPrice() {
         return unitNetPrice;
     }
@@ -119,7 +134,6 @@ public class Invoice {
         this.unitNetPrice = netPrice;
     }
 
-    @Column("invoice_amount")
     public BigDecimal getInvoiceAmount() {
         return invoiceAmount;
     }
@@ -128,7 +142,6 @@ public class Invoice {
         this.invoiceAmount = invoiceAmount;
     }
 
-    @Column("vat_rate")
     public BigDecimal getVatRate() {
         return vatRate;
     }
@@ -137,7 +150,6 @@ public class Invoice {
         this.vatRate = vatRate;
     }
 
-    @Column("created")
     public Timestamp getCreated() {
         return created;
     }
@@ -146,7 +158,6 @@ public class Invoice {
         this.created = created;
     }
 
-    @Column("lastupdated")
     public Timestamp getLastupdated() {
         return lastupdated;
     }
@@ -155,4 +166,23 @@ public class Invoice {
         this.lastupdated = lastupdated;
     }
 
+    @Override
+    public String toString() {
+        return "Invoice{" +
+                "id=" + id +
+                ", invoiceDate=" + invoiceDate +
+                ", dueDate=" + dueDate +
+                ", invoiceNumber='" + invoiceNumber + '\'' +
+                ", vendorId=" + vendorId +
+                ", debtorId=" + debtorId +
+                ", description='" + description + '\'' +
+                ", unitAmount=" + unitAmount +
+                ", unitName='" + unitName + '\'' +
+                ", unitNetPrice=" + unitNetPrice +
+                ", invoiceAmount=" + invoiceAmount +
+                ", vatRate=" + vatRate +
+                ", created=" + created +
+                ", lastupdated=" + lastupdated +
+                '}';
+    }
 }

@@ -5,36 +5,28 @@ import io.vavr.control.Try;
 import net.sf.jasperreports.engine.*;
 import org.example.international.invoice.InternationalInvoice;
 import org.example.invoice.Invoice;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class InvoicePdfService {
 
-    private final DataSource dataSource;
+    private final SessionFactory sessionFactory;
 
-    public InvoicePdfService(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public InvoicePdfService(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
-    private enum Template {
-        INVOICE("/jasper/invoice.jrxml"),
-        INTERNATIONAL_INVOICE("/jasper/international_invoice.jrxml");
-
-        private final String pathToTemplate;
-
-        Template(String pathToTemplate) {
-            this.pathToTemplate = pathToTemplate;
-        }
-
-        String getPath() {
-            return pathToTemplate;
+    private static JasperPrint fillReport(JasperReport report, Map<String, Object> parameters, Connection connection) {
+        try {
+            return JasperFillManager.fillReport(report, parameters, connection);
+        } catch (Exception exception) {
+            throw InvoicePdfGenerationException.templateFillingFailed(exception);
         }
     }
 
@@ -71,21 +63,7 @@ public class InvoicePdfService {
     }
 
     private JasperPrint fill(JasperReport report, Map<String, Object> parameters) {
-        Connection connection = null;
-        try {
-            connection = dataSource.getConnection();
-            return JasperFillManager.fillReport(report, parameters, connection);
-        } catch (Exception exception) {
-            throw InvoicePdfGenerationException.templateFillingFailed(exception);
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
+        return sessionFactory.fromSession(session -> session.doReturningWork(connection -> fillReport(report, parameters, connection)));
     }
 
     private byte[] generatePdf(JasperPrint jasperPrint) {
@@ -93,6 +71,21 @@ public class InvoicePdfService {
             return JasperExportManager.exportReportToPdf(jasperPrint);
         } catch (JRException exception) {
             throw InvoicePdfGenerationException.pdfGenerationFailed(exception);
+        }
+    }
+
+    private enum Template {
+        INVOICE("/jasper/invoice.jrxml"),
+        INTERNATIONAL_INVOICE("/jasper/international_invoice.jrxml");
+
+        private final String pathToTemplate;
+
+        Template(String pathToTemplate) {
+            this.pathToTemplate = pathToTemplate;
+        }
+
+        String getPath() {
+            return pathToTemplate;
         }
     }
 }

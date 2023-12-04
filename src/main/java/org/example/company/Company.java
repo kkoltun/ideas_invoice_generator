@@ -1,18 +1,29 @@
 package org.example.company;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 
-@Table("company")
+import static jakarta.persistence.GenerationType.IDENTITY;
+
+@Entity
 public class Company {
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
     private Integer id;
+
     private String name;
+
+    @Column(name = "address_line_1")
     private String addressLine1;
+
+    @Column(name = "address_line_2")
     private String addressLine2;
+
+    @Column(name = "address_line_3")
     private String addressLine3;
+
+    @Column(name = "registration_number")
     private String registrationNumber;
     private Timestamp created;
     private Timestamp lastupdated;
@@ -20,7 +31,6 @@ public class Company {
     public Company() {
     }
 
-    @Id
     public Integer getId() {
         return id;
     }
@@ -29,7 +39,6 @@ public class Company {
         this.id = id;
     }
 
-    @Column("name")
     public String getName() {
         return name;
     }
@@ -38,7 +47,6 @@ public class Company {
         this.name = name;
     }
 
-    @Column("address_line_1")
     public String getAddressLine1() {
         return addressLine1;
     }
@@ -47,7 +55,6 @@ public class Company {
         this.addressLine1 = addressLine1;
     }
 
-    @Column("address_line_2")
     public String getAddressLine2() {
         return addressLine2;
     }
@@ -56,7 +63,6 @@ public class Company {
         this.addressLine2 = addressLine2;
     }
 
-    @Column("address_line_3")
     public String getAddressLine3() {
         return addressLine3;
     }
@@ -65,7 +71,6 @@ public class Company {
         this.addressLine3 = addressLine3;
     }
 
-    @Column("registration_number")
     public String getRegistrationNumber() {
         return registrationNumber;
     }
@@ -74,7 +79,6 @@ public class Company {
         this.registrationNumber = idNumber;
     }
 
-    @Column("created")
     public Timestamp getCreated() {
         return created;
     }
@@ -83,7 +87,6 @@ public class Company {
         this.created = created;
     }
 
-    @Column("lastupdated")
     public Timestamp getLastupdated() {
         return lastupdated;
     }

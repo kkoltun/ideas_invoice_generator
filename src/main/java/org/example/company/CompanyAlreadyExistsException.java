@@ -10,4 +10,9 @@ public class CompanyAlreadyExistsException extends RuntimeException {
     public String getInvoiceActorRegistrationNumber() {
         return invoiceActorRegistrationNumber;
     }
+
+    @Override
+    public String getMessage() {
+        return String.format("Company with registration number [%s] already exists", invoiceActorRegistrationNumber);
+    }
 }

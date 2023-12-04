@@ -1,18 +1,27 @@
 package org.example.company;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.stream.StreamSupport;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import static org.example.company.CompanyQueries_.findByRegistrationNumber;
 
 @Service
 public class CompanyService {
 
-    private final CompanyRepository companyRepository;
+    private final Logger log = LogManager.getLogger(CompanyService.class);
 
-    public CompanyService(CompanyRepository companyRepository) {
-        this.companyRepository = companyRepository;
+    private final SessionFactory sessionFactory;
+
+    public CompanyService(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     public void addCompany(CompanyDto companyDto) {
@@ -20,18 +29,21 @@ public class CompanyService {
     }
 
     public void addCompany(Company company) throws CompanyAlreadyExistsException {
-        boolean companyExists = companyRepository.findByRegistrationNumber(company.getRegistrationNumber())
-                .iterator().hasNext();
-        if (companyExists) {
-            throw new CompanyAlreadyExistsException(company.getRegistrationNumber());
-        }
+        sessionFactory.inTransaction(session -> {
+            boolean companyExists = findByRegistrationNumber(session, company.getRegistrationNumber()).size() > 0;
 
-        // todo check the added company
-        companyRepository.save(company);
+            if (companyExists) {
+                throw new CompanyAlreadyExistsException(company.getRegistrationNumber());
+            }
+
+            // todo check the added company
+            session.persist(company);
+        });
     }
 
     public Company getCompany(String companyRegistrationNumber) {
-        return StreamSupport.stream(companyRepository.findByRegistrationNumber(companyRegistrationNumber).spliterator(), false)
+        return sessionFactory.fromSession(session -> findByRegistrationNumber(session, companyRegistrationNumber))
+                .stream()
                 .findAny()
                 .orElse(null);
     }
@@ -46,21 +58,28 @@ public class CompanyService {
     }
 
     public Company getCompanyById(int id) {
-        return companyRepository.findById(id)
-                .orElse(null);
+        return sessionFactory.fromSession(session -> session.find(Company.class, id));
     }
 
-    public Iterable<Company> getCompaniesByIds(Iterable<Integer> ids) {
-        return companyRepository.findAllById(ids);
+    public List<Company> getCompaniesByIds(Set<Integer> ids) {
+        return sessionFactory.fromSession(session -> session.byMultipleIds(Company.class).multiLoad(new ArrayList<>(ids)));
     }
 
     public void deleteCompany(String companyRegistrationNumber) {
-        Company company = getCompany(companyRegistrationNumber);
-        if (company == null) {
-            return;
-        }
-
-        companyRepository.delete(company);
+        // todo czemu inSession nie działało, a inTransaction działa?
+        //   przy używaniu inSession nie widać w ogóle transaction
+        sessionFactory.inSession(session -> {
+            final var optionalCompany = findByRegistrationNumber(session, companyRegistrationNumber)
+                    .stream()
+                    .findAny();
+            if (optionalCompany.isPresent()) {
+                final var company = optionalCompany.get();
+                log.info(company);
+                session.remove(company);
+            } else {
+                log.info("Could not find company with registration number [{}]", companyRegistrationNumber);
+            }
+        });
     }
 
     private Company mapCompany(CompanyDto dto) {

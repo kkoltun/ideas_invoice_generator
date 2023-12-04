@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import static java.math.BigDecimal.ZERO;
+
 public class HourlyInvoiceDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate fromDate;
@@ -14,6 +16,7 @@ public class HourlyInvoiceDto {
     private double unitAmount;
     private BigDecimal unitNetPrice;
     private BigDecimal invoiceAmount;
+    private BigDecimal vatAmount = ZERO;
     private String debtorRegistrationNumber;
     private String vendorRegistrationNumber;
 
@@ -63,6 +66,14 @@ public class HourlyInvoiceDto {
 
     public void setInvoiceAmount(BigDecimal invoiceAmount) {
         this.invoiceAmount = invoiceAmount;
+    }
+
+    public BigDecimal getVatAmount() {
+        return vatAmount;
+    }
+
+    public void setVatAmount(BigDecimal vatAmount) {
+        this.vatAmount = vatAmount;
     }
 
     public String getDebtorRegistrationNumber() {
